@@ -239,3 +239,55 @@
             }`
  3) 카운트 다운 문자열 표기
      -     divClock.innerText = "남은 시간은 "+close_time2+" 초 입니다.";
+     
+## 2023년 4 월 26 일 8 주차 중간고사
+
+## 2023년 5 월  3 일 9 주차 홈페이지 수정 완료
+### 1. 꾸글.com
+ 1) 로그인
+     - login html 생성
+         - 부트스트랩 signin 샘플 코드 body 수정
+         - 필요없는 자바 스크립트 연동 삭제
+         - 검색 창 삭제
+         - 구글 이미지, 최하단 Footer
+         - 가독성을 위한 한글 수정
+     - login js 생성
+         - 아이디, 패스워드 모두 입력하지 않으면 메시지창 출력
+     - index_login html 생성
+         - index html과 거의 동일한 코드
+         - 팝업창 해제
+         - 로그아웃 버튼 수정
+         - 로그인 창에 입력한 아이디를 가져와 메시지 띄우기.
+### 2. 추가 구현
+ 1) 패스워드 필터링
+     - 아이디 패스워드 문자열 검사 기능 추가
+         -     `function login_check(id, password){
+                    // 이메일 형식 검사
+                    var emailRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,}$/;
+                    if(!emailRegex.test(id)){
+                        alert("이메일 형식이 맞지 않습니다.");
+                        return false;
+                    }
+
+                    // 비밀번호 형식 검사
+                    var passwordRegex = /^(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
+                    if(!passwordRegex.test(password)){
+                        var message = "비밀번호 ";
+                        if(password.length < 8 || password.length > 20){
+                            message += "는 8자 이상 20자 이내여야 합니다."
+                        }
+                        else{
+                            if(!/\d/.test(password)){
+                                message += "에는 숫자가 포함되어야 합니다."
+                            }
+                            if(!/[$@$!%*#?&]/.test(password)){
+                                message += "에는 특수 기호가 포함되어야 합니다."
+                            }
+                        }
+                        alert(message);
+                        return false;
+                    }
+
+                    return true;
+                }`
+     

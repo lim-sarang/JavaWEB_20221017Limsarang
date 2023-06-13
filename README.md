@@ -195,7 +195,7 @@
          - 그렇지 않다면, 실행
 ### 2. 추가 구현
  1) 비속어 입력 시, 출력이 불가능하도록 필터링.
-      -     `function no_str(search_str) {
+      -     function no_str(search_str) {
                 const stopwords = ["바보", "멍청이", "등신","병신"]; // 검색 제한 단어
                 for (let i = 0; i < stopwords.length; i++) {
                     if (search_str.includes(stopwords[i])) {
@@ -203,7 +203,7 @@
                     }
                 }
                 return false;
-            }`
+            }
 
 ## 2023년 4 월 19 일 7 주차 홈페이지 수정 완료
 ### 1. 꾸글.com
@@ -259,11 +259,11 @@
          - 로그아웃 버튼 수정
          - 로그인 창에 입력한 아이디를 가져와 메시지 띄우기.
 ### 2. 추가 구현
- 1) 패스워드 필터링
+ 1) 아이디 패스워드
      - 아이디 패스워드 문자열 검사 기능 추가
-         -     `function login_check(id, password){
+         -     function login_check(id, password){
                     // 이메일 형식 검사
-                    var emailRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,}$/;
+                    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                     if(!emailRegex.test(id)){
                         alert("이메일 형식이 맞지 않습니다.");
                         return false;
@@ -276,18 +276,39 @@
                         if(password.length < 8 || password.length > 20){
                             message += "는 8자 이상 20자 이내여야 합니다."
                         }
-                        else{
-                            if(!/\d/.test(password)){
+                        else if (!/\d/.test(password)){
                                 message += "에는 숫자가 포함되어야 합니다."
                             }
-                            if(!/[$@$!%*#?&]/.test(password)){
+                        else if(!/[$@$!%*#?&]/.test(password)){
                                 message += "에는 특수 기호가 포함되어야 합니다."
                             }
-                        }
                         alert(message);
                         return false;
                     }
 
                     return true;
-                }`
-     
+                }
+    - 로그인 후 아이디+반갑습니다 띄울 때, 아이디의 @를 기준으로 앞부분만 출력
+        -     function get_id(){
+                var getParameters = function(paramName){
+                    var returnValue;
+                    var url = location.href;
+                    var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+                    for(var i = 0; i < parameters.length; i++) { 
+                        var varName = parameters[i].split('=')[0];
+
+                        if (varName.toUpperCase() == paramName.toUpperCase()) {
+                            returnValue = parameters[i].split('=')[1];
+                            return decodeURIComponent(returnValue);
+                        }
+                    }
+                };
+
+                var email = getParameters('id');
+                var username = email.split('@')[0]; // @ 기호를 기준으로 문자열 나누기
+                alert(username + '님 방갑습니다!');
+            }
+ 
+ 3) 로그인 입력창 사이즈 조절 및 가운데 정렬
+     - 사이즈 조절 및 가운데 정렬을 원하는 곳에 삽입.
+         -     style="margin: 0 auto; max-width: 800px; width: 100%;"             

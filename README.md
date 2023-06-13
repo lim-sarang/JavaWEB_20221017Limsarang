@@ -389,7 +389,7 @@
          - get_id 함수에 Timer 작동 추가
          -      sessionTimer();
          -      타이머 및 로그아웃.
-         -      `function sessionTimer() {
+         -      function sessionTimer() {
                     let timer_div = document.createElement("div");
                     timer_div.style.color = "white";
                     timer_div.style.backgroundColor = "black";
@@ -413,5 +413,5 @@
                             timer_div.innerHTML = "로그인 시간: " + remaining_time + "초 남았습니다.";
                         }
                     }, 1000);
-                }`
+                }
 

@@ -248,3 +248,12 @@
 ### 3. 추가 구현
  1) 표 가운데 정렬 및 사이즈 지정
 -     <div class="table-responsive" style="background-color: #; width: 500px; margin: auto;">
+- -     function no_str(search_str) {
+                const stopwords = ["바보", "멍청이", "등신","병신"]; // 검색 제한 단어
+                for (let i = 0; i < stopwords.length; i++) {
+                    if (search_str.includes(stopwords[i])) {
+                        return true;
+                    }
+                }
+                return false;
+            }

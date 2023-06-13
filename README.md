@@ -309,6 +309,69 @@
                 alert(username + '님 방갑습니다!');
             }
  
- 3) 로그인 입력창 사이즈 조절 및 가운데 정렬
+ 2) 로그인 입력창 사이즈 조절 및 가운데 정렬
      - 사이즈 조절 및 가운데 정렬을 원하는 곳에 삽입.
          -     style="margin: 0 auto; max-width: 800px; width: 100%;"             
+
+## 2023년 5월 10일 10 주차 홈페이지 수정 완료
+### 1. 꾸글.com
+ 1) 팝업창
+     - x 일간 보지 않기
+         - 쿠키를 통해 체크박스에 체크가 되어 있으면 x일 동안 실행이 되지 않도록 함.
+         - 체크가 되지 않는다면 쿠키를 삭제함.
+     - ID 저장하기
+         - 쿠키를 통해 체크박스에 체크가 되어 있으면 아이디 저장
+### 2. 추가 구현
+ 1) 로그인 시도 횟수 제한
+     - 로그인 시도 5회 초과 시, 1분간 로그인 불가능. 로그인 버튼 비활성화
+         -     function login_count() {
+                  let count = parseInt(getCookie("login_cnt")); // 기존 쿠키의 값 가져오기
+                  if (isNaN(count)) { // 쿠키가 존재하지 않으면
+                    count = 0; // 초기값 설정
+                  }
+                  setCookie("login_cnt", count+1, 1); // 로그인 횟수 쿠키에 저장
+
+                  login_attempt_count++; // 로그인 시도 횟수 증가
+
+                  if(login_attempt_count >= login_attempt_limit) { // 로그인 시도 횟수가 제한 횟수를 초과한 경우
+                    login_button.disabled = true; // 로그인 버튼 비활성화
+                    createTimer(); // 타이머 창 생성
+                    setTimeout(function() { // 일정 시간이 지난 후에 로그인 시도 횟수와 쿠키를 초기화
+                      login_attempt_count = 0;
+                      deleteCookie("login_cnt");
+                    }, login_attempt_timeout * 1000); // setTimeout 함수의 시간 인자는 밀리초 단위이므로 1000을 곱해줌
+                    return false;
+                  }
+                  return true;
+                }
+    - 로그인 시도 5회 초과 시, 1분간 로그인 불가능. 남은 시간 알려주는 타이머
+        -     function createTimer() {
+                  let timer_div = document.createElement("div");
+                  timer_div.style.color = "white";
+                  timer_div.style.backgroundColor = "black";
+                  timer_div.style.border = "1px solid white";
+                  timer_div.style.padding = "10px";
+                  timer_div.style.position = "fixed";
+                  timer_div.style.top = "50%";
+                  timer_div.style.left = "50%";
+                  timer_div.style.transform = "translate(-50%, -50%)";
+                  timer_div.style.zIndex = "9999";
+                  document.body.appendChild(timer_div);
+
+                  let remaining_time = login_attempt_timeout;
+                  timer_div.innerHTML = "로그인 시도 제한 시간: " + remaining_time + "초 남았습니다.";
+
+                  let timer_id = setInterval(function() {
+                    remaining_time--;
+                    if (remaining_time === 0) {
+                      clearInterval(timer_id);
+                      timer_div.remove();
+                      login_button.disabled = false; // 로그인 버튼 활성화
+                    } else {
+                      timer_div.innerHTML = "로그인 시도 제한 시간: " + remaining_time + "초 남았습니다.";
+                    }
+                  }, 1000);
+                }
+    - 로그인 실패 시, 시도 횟수 알려줌
+        -     alert("현재 로그인 시도 횟수: " + (login_attempt_count + 1));
+

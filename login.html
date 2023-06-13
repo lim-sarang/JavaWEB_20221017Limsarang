@@ -16,7 +16,7 @@
         <script type="text/javascript" src="/js/login.js" defer></script>
         
     </head>
-	<body class="text-center">
+	<body class="text-center" onload="init();">
         <nav class="navbar navbar-expand-lg bg-light">
           <div class="container-fluid">
             <a class="navbar-brand" href="#">전체메뉴</a>
@@ -78,10 +78,10 @@
 
             <div class="checkbox mb-3">
               <label>
-                <input type="checkbox" value="remember-me"> 아이디 기억
+                <input type="checkbox" value="remember-me" id="idSaveCheck"> 아이디 기억
               </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" onclick="login()" type="button" style="margin: 0 auto; max-width: 500px; width: 100%;">로그인하기</button>
+            <button class="w-100 btn btn-lg btn-primary" onclick="login()" type="button" id="login-button" style="margin: 0 auto; max-width: 500px; width: 100%;">로그인하기</button>
             <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
 
             <!-- 

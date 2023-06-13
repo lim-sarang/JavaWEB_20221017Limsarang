@@ -73,30 +73,19 @@ function login_check(id, password) { // 이메일 형식 검사
     }
     return true;
 }
-function setCookie(name, value, expiredays) {
-    var date = new Date();
-    date.setDate(date.getDate() + expiredays);
-    document.cookie = escape(name) + "=" + escape(value) + "; expires=" + date.toUTCString() + "SameSite=None; Secure";
+
+function addJavascript(jsname) { // 자바스크립트 외부 연동
+	var th = document.getElementsByTagName('head')[0];
+	var s = document.createElement('script');
+	s.setAttribute('type','text/javascript');
+	s.setAttribute('src',jsname);
+	th.appendChild(s);
 }
-function getCookie(name) {
-    var cookie = document.cookie;
-    console.log("쿠키를 요청합니다.");
-    if (cookie != "") {
-        var cookie_array = cookie.split("; ");
-        for (var index in cookie_array) {
-            var cookie_name = cookie_array[index].split("=");
-            if (cookie_name[0] == "id") {
-                return cookie_name[1];
-            }
-        }
-    }
-    return;
-}
-function deleteCookie(cookieName) {
-    var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() - 1);
-    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
-}
+addJavascript('/js/security.js'); // 암복호화 함수
+addJavascript('/js/session.js'); // 세션 함수
+addJavascript('/js/cookie.js'); // 쿠키 함수
+
+
 function init() { // 로그인 폼에 쿠키에서 가져온 아이디 입력
     let id = document.querySelector("#floatingInput");
     let check = document.querySelector("#idSaveCheck");
@@ -107,149 +96,6 @@ function init() { // 로그인 폼에 쿠키에서 가져온 아이디 입력
     }
     session_check(); // 세션 유무 검사
 }
-function createTimer() {
-    let timer_div = document.createElement("div");
-    timer_div.style.color = "white";
-    timer_div.style.backgroundColor = "black";
-    timer_div.style.border = "1px solid white";
-    timer_div.style.padding = "10px";
-    timer_div.style.position = "fixed";
-    timer_div.style.top = "50%";
-    timer_div.style.left = "50%";
-    timer_div.style.transform = "translate(-50%, -50%)";
-    timer_div.style.zIndex = "9999";
-    document.body.appendChild(timer_div);
-    let remaining_time = login_attempt_timeout;
-    timer_div.innerHTML = "로그인 제한 시간: " + remaining_time + "초 남았습니다.";
-    let timer_id = setInterval(function () {
-        remaining_time--;
-        if (remaining_time === 0) {
-            clearInterval(timer_id);
-            timer_div.remove();
-            login_button.disabled = false; // 로그인 버튼 활성화
-        } else {
-            timer_div.innerHTML = "로그인 제한 시간: " + remaining_time + "초 남았습니다.";
-        }
-    }, 1000);
-}
-function sessionTimer() {
-    let timer_div = document.createElement("div");
-    timer_div.style.color = "white";
-    timer_div.style.backgroundColor = "black";
-    timer_div.style.border = "1px solid white";
-    timer_div.style.padding = "10px";
-    timer_div.style.position = "fixed";
-    timer_div.style.top = "50%";
-    timer_div.style.left = "50%";
-    timer_div.style.transform = "translate(-50%, -50%)";
-    timer_div.style.zIndex = "9999";
-    document.body.appendChild(timer_div);
-    let remaining_time = login_attempt_timeout;
-    timer_div.innerHTML = "로그인 시간: " + remaining_time + "초 남았습니다.";
-    let timer_id = setInterval(function () {
-        remaining_time--;
-        if (remaining_time === 0) {
-            clearInterval(timer_id);
-            timer_div.remove();
-            logout();
-        } else {
-            timer_div.innerHTML = "로그인 시간: " + remaining_time + "초 남았습니다.";
-        }
-    }, 1000);
-}
-function login_count() {
-    let count = parseInt(getCookie("login_cnt")); // 기존 쿠키의 값 가져오기
-    if (isNaN(count)) { // 쿠키가 존재하지 않으면
-        count = 0; // 초기값 설정
-    }setCookie("login_cnt", count + 1, 1); // 로그인 횟수 쿠키에 저장
-    login_attempt_count++; // 로그인 시도 횟수 증가
-    if (login_attempt_count >= login_attempt_limit) { // 로그인 시도 횟수가 제한 횟수를 초과한 경우
-        login_button.disabled = true; // 로그인 버튼 비활성화
-        createTimer(); // 타이머 창 생성
-        setTimeout(function () { // 일정 시간이 지난 후에 로그인 시도 횟수와 쿠키를 초기화
-            login_attempt_count = 0;
-            deleteCookie("login_cnt");
-        }, login_attempt_timeout * 1000); // setTimeout 함수의 시간 인자는 밀리초 단위이므로 1000을 곱해줌
-        return false;
-    }
-    return true;
-}
-let login_button = document.getElementById("login-button");
-login_button.addEventListener("click", login_count);
-function logout_count() {
-    let count = parseInt(getCookie("logout_cnt")); // 기존 쿠키의 값 가져오기
-    if (isNaN(count)) { // 쿠키가 존재하지 않으면
-        count = 0; // 초기값 설정
-    }setCookie("logout_cnt", count + 1, 1); // 로그아웃 횟수 쿠키에 저장
-}
-function session_set() { // 세션 저장
-    let id = document.querySelector("#floatingInput");
-    let password = document.querySelector("#floatingPassword");
-    if (sessionStorage) {
-        let en_text = encrypt_text(password.value);
-        sessionStorage.setItem("Session_Storage_test", en_text);
-    } else {
-        alert("로컬 스토리지 지원 x");
-    }
-}
-function session_get() { // 세션 읽기
-    if (sessionStorage) {
-        return sessionStorage.getItem("Session_Storage_test");
-    } else {
-        alert("세션 스토리지 지원 x");
-    }
-}
 
-function session_check() { //세션 검사
-    if (sessionStorage.getItem("Session_Storage_test")) {
-        alert("이미 로그인 되었습니다.");
-        location.href='index_login.html'; // 로그인된 페이지로 이동
-    }
-}
-
-function session_del() {//세션 삭제
-    // Check if the sessionStorage object exists
-    if (sessionStorage) {
-        // Retrieve data
-        sessionStorage.removeItem("Session_Storage_test");
-        alert('로그아웃 버튼 클릭 확인 : 세션 스토리지를 삭제합니다.');
-    } else {
-        alert("세션 스토리지 지원 x");
-    }
-}
-
-function encodeByAES256(key, data){
-    const cipher = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(key), {
-        iv: CryptoJS.enc.Utf8.parse(""),
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-    });
-    return cipher.toString();
-}
-
-function decodeByAES256(key, data){
-    const cipher = CryptoJS.AES.decrypt(data, CryptoJS.enc.Utf8.parse(key), {
-        iv: CryptoJS.enc.Utf8.parse(""),
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-    });
-    return cipher.toString(CryptoJS.enc.Utf8);
-};
-function encrypt_text(password){
-    const k = "key"; // 클라이언트 키
-    const rk = k.padEnd(32, " "); // AES256은 key 길이가 32
-    const b = password;
-    const eb = this.encodeByAES256(rk, b);
-    return eb;
-    console.log(eb);
-}
-
-function decrypt_text(){
-    const k = "key"; // 서버의 키
-    const rk = k.padEnd(32, " "); // AES256은 key 길이가 32
-    const eb = session_get();
-    const b = this.decodeByAES256(rk, eb);
-    console.log(b); 
-}
 
 

@@ -220,7 +220,7 @@
      - 큐를 사용해 배열 앞의 요소 삭제.
      -     search_array.shift();
  2) 비속어 검색어 출력 시 붉은 메시지 창 출력
-     -     `else if (no_str(search_str.value)) {
+     -     else if (no_str(search_str.value)) {
                  let message = document.createElement("div");
                     message.innerHTML = search_str.value+'은/는 검색어로 적절하지 않습니다.';
                     message.style.color = "red";
@@ -236,7 +236,7 @@
                     setTimeout(function() {
                         message.remove();
                     }, 2000);
-            }`
+            }
  3) 카운트 다운 문자열 표기
      -     divClock.innerText = "남은 시간은 "+close_time2+" 초 입니다.";
      

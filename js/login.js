@@ -17,15 +17,16 @@ function login() {
     setCookie("id", id.value, 0); // 쿠키 삭제
   }
 
-  // 로그인 시도 제한 처리
   if (login_check(id.value, password.value)) {
     form.action = "../index_login.html";
     form.method = "get";
+    session_set(); // 세션 생성
     form.submit();
   }
 }
 
 function logout(){
+    session_del(); // 세션 삭제
     location.href='../index.html';
 }
 
@@ -65,15 +66,15 @@ function login_check(id, password){
         var message = "비밀번호 ";
         if(password.length < 8 || password.length > 20){;
             message += "는 8자 이상 20자 이내여야 합니다."
-            alert("현재 로그인 시도 횟수: " + login_attempt_count);
+            alert("현재 로그인 시도 횟수: " + (login_attempt_count + 1));
         }
         else if (!/\d/.test(password)){
-                message += "에는 숫자가 포함되어야 합니다."
-            alert("현재 로그인 시도 횟수: " + login_attempt_count);
-            }
+            message += "에는 숫자가 포함되어야 합니다."
+            alert("현재 로그인 시도 횟수: " + (login_attempt_count + 1));
+        }
         else if(!/[$@$!%*#?&]/.test(password)){
                 message += "에는 특수 기호가 포함되어야 합니다."
-                alert("현재 로그인 시도 횟수: " + login_attempt_count);
+                alert("현재 로그인 시도 횟수: " + (login_attempt_count + 1));
             }
         alert(message);
         return false;
@@ -107,17 +108,6 @@ function deleteCookie(cookieName){
     var expireDate = new Date();
     expireDate.setDate(expireDate.getDate() - 1);
     document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
-}
-
-function init(){ // 로그인 폼에 쿠키에서 가져온 아이디 입력
-    let id = document.querySelector("#floatingInput");
-    let check = document.querySelector("#idSaveCheck");
-    let get_id = getCookie("id");
-    
-    if(get_id) { 
-    id.value = get_id; 
-    check.checked = true; 
-    }
 }
 
 function createTimer() {
@@ -178,4 +168,92 @@ function logout_count() {
     count = 0; // 초기값 설정
     }
     setCookie("logout_cnt", count+1, 1); // 로그아웃 횟수 쿠키에 저장
+}
+
+function session_set() { //세션 저장
+    let id = document.querySelector("#floatingInput");
+    let password = document.querySelector("#floatingPassword");
+    if (sessionStorage) {
+        let en_text = encrypt_text(password.value);
+        sessionStorage.setItem("Session_Storage_test", en_text);
+    } else {
+        alert("로컬 스토리지 지원 x");
+    }
+}
+
+function session_get() { //세션 읽기
+    if (sessionStorage) {
+       return sessionStorage.getItem("Session_Storage_test");
+    } else {
+        alert("세션 스토리지 지원 x");
+    }
+}
+
+function session_check() { //세션 검사
+    if (sessionStorage.getItem("Session_Storage_test")) {
+        alert("이미 로그인 되었습니다.");
+        location.href='index_login.html'; // 로그인된 페이지로 이동
+    }
+}
+
+function session_del() {//세션 삭제
+    // Check if the sessionStorage object exists
+    if (sessionStorage) {
+        // Retrieve data
+        sessionStorage.removeItem("Session_Storage_test");
+        alert('로그아웃 버튼 클릭 확인 : 세션 스토리지를 삭제합니다.');
+    } else {
+        alert("세션 스토리지 지원 x");
+    }
+}
+
+function encodeByAES256(key, data){
+    const cipher = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(key), {
+        iv: CryptoJS.enc.Utf8.parse(""),
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+    });
+    return cipher.toString();
+}
+
+function decodeByAES256(key, data){
+    const cipher = CryptoJS.AES.decrypt(data, CryptoJS.enc.Utf8.parse(key), {
+        iv: CryptoJS.enc.Utf8.parse(""),
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+    });
+    return cipher.toString(CryptoJS.enc.Utf8);
+};
+
+function encrypt_text(password){
+    const k = "key"; // 클라이언트 키
+    const rk = k.padEnd(32, " "); // AES256은 key 길이가 32
+    const b = password;
+    const eb = this.encodeByAES256(rk, b);
+    return eb;
+    console.log(eb);
+}
+
+function decrypt_text(){
+    const k = "key"; // 서버의 키
+    const rk = k.padEnd(32, " "); // AES256은 key 길이가 32
+    const eb = session_get();
+    const b = this.decodeByAES256(rk, eb);
+    console.log(b); 
+}
+
+
+
+
+function init(){ // 로그인 폼에 쿠키에서 가져온 아이디 입력
+    let id = document.querySelector("#floatingInput");
+    let check = document.querySelector("#idSaveCheck");
+    let get_id = getCookie("id");
+    
+    if(get_id) { 
+    id.value = get_id; 
+    check.checked = true; 
+    }
+    session_check(); // 세션 유무 검사
+
 }

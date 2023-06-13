@@ -380,7 +380,38 @@
  2) 암호화/복호화
  3) 아이디/ 패스워드 처리
 ### 2. 추가 구현
- 1) 로그인 실패 시, 1분간 로그인 제한.
-     - 10주차와 동일.
-
+ 1) 로그인 성공 시, 아이디의 @를 기준으로 앞부분만 출력
+     -      var email = getParameters('id');
+            var username = email.split('@')[0]; // '@'를 기준으로 앞부분 추출
+            alert(username + '님 방갑습니다!');
+ 2) 로그인 유지 1분 제한
+     - 남은 로그인 유지 시간 알려주는 타이머 및 자동 로그아웃 및 세션 삭제
+         - get_id 함수에 Timer 작동 추가
+         -      sessionTimer();
+         -      타이머 및 로그아웃.
+         -      `function sessionTimer() {
+                    let timer_div = document.createElement("div");
+                    timer_div.style.color = "white";
+                    timer_div.style.backgroundColor = "black";
+                    timer_div.style.border = "1px solid white";
+                    timer_div.style.padding = "10px";
+                    timer_div.style.position = "fixed";
+                    timer_div.style.top = "50%";
+                    timer_div.style.left = "50%";
+                    timer_div.style.transform = "translate(-50%, -50%)";
+                    timer_div.style.zIndex = "9999";
+                    document.body.appendChild(timer_div);
+                    let remaining_time = login_attempt_timeout;
+                    timer_div.innerHTML = "로그인 시간: " + remaining_time + "초 남았습니다.";
+                    let timer_id = setInterval(function () {
+                        remaining_time--;
+                        if (remaining_time === 0) {
+                            clearInterval(timer_id);
+                            timer_div.remove();
+                            logout();
+                        } else {
+                            timer_div.innerHTML = "로그인 시간: " + remaining_time + "초 남았습니다.";
+                        }
+                    }, 1000);
+                }`
 

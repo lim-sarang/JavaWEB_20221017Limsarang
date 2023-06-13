@@ -204,3 +204,38 @@
                 }
                 return false;
             }`
+
+## 2023년 4 월 19 일 7 주차 홈페이지 수정 완료
+### 1. 꾸글.com
+ 1) 팝업창
+     - close_window js 파일 추가
+     - 1초마다 닫히기 까지의 초를 갱신
+ 2) 배열
+     - 배열 접근, 삽입, 사용 방법 등
+     - 배열 제어
+ 3) 검색창
+     - 검색어 목록 출력
+### 2. 추가 구현
+ 1) 검색어 목록 10개 출력 제한
+     - 큐를 사용해 배열 앞의 요소 삭제.
+     -     search_array.shift();
+ 2) 비속어 검색어 출력 시 붉은 메시지 창 출력
+     -     `else if (no_str(search_str.value)) {
+                 let message = document.createElement("div");
+                    message.innerHTML = search_str.value+'은/는 검색어로 적절하지 않습니다.';
+                    message.style.color = "red";
+                    message.style.backgroundColor = "white";
+                    message.style.border = "1px solid red";
+                    message.style.padding = "10px";
+                    message.style.position = "fixed";
+                    message.style.top = "50%";
+                    message.style.left = "50%";
+                    message.style.transform = "translate(-50%, -50%)";
+                    message.style.zIndex = "9999";
+                    document.body.appendChild(message);
+                    setTimeout(function() {
+                        message.remove();
+                    }, 2000);
+            }`
+ 3) 카운트 다운 문자열 표기
+     -     divClock.innerText = "남은 시간은 "+close_time2+" 초 입니다.";

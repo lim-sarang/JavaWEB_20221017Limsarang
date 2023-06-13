@@ -173,7 +173,6 @@
          - 변수 value의 length가 0인지 ===로 엄격하게 비교
 ### 2. 추가 구현
  1) 표 가운데 정렬 및 사이즈 지정
-<<<<<<< HEAD
     -     <div class="table-responsive" style="background-color: #; width: 500px; margin: auto;">
 
 ## 2023년 4 월 12 일 6 주차 홈페이지 수정 완료
@@ -196,11 +195,7 @@
          - 그렇지 않다면, 실행
 ### 2. 추가 구현
  1) 비속어 입력 시, 출력이 불가능하도록 필터링.
-      -     function no_str(search_str) {
-=======
--     <div class="table-responsive" style="background-color: #; width: 500px; margin: auto;">
-- -     function no_str(search_str) {
->>>>>>> db84e842834d923714760ba6950a26cac5ff5aa7
+      -     `function no_str(search_str) {
                 const stopwords = ["바보", "멍청이", "등신","병신"]; // 검색 제한 단어
                 for (let i = 0; i < stopwords.length; i++) {
                     if (search_str.includes(stopwords[i])) {
@@ -208,8 +203,4 @@
                     }
                 }
                 return false;
-<<<<<<< HEAD
-            }
-=======
-            }
->>>>>>> db84e842834d923714760ba6950a26cac5ff5aa7
+            }`

@@ -247,4 +247,4 @@
          - 변수 value의 length가 0인지 ===로 엄격하게 비교
 ### 3. 추가 구현
  1) 표 가운데 정렬 및 사이즈 지정
-    <div class="table-responsive" style="background-color: #; width: 500px; margin: auto;">
+-     <div class="table-responsive" style="background-color: #; width: 500px; margin: auto;">

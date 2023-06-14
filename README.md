@@ -389,7 +389,7 @@
          - get_id 함수에 Timer 작동 추가
          -      sessionTimer();
          -      타이머 및 로그아웃.
-         -      function sessionTimer() {
+         -      ## function sessionTimer() {
                     let timer_div = document.createElement("div");
                     timer_div.style.color = "white";
                     timer_div.style.backgroundColor = "black";
@@ -414,4 +414,23 @@
                         }
                     }, 1000);
                 }
+## 2023년 5월 24일 12주차 홈페이지 수정 완료
+### 1. 꾸글.com
+ 1) login js 스크립트 분리
+     - session
+     - security
+     - cookie
+ 2) 웹 세션 객체 저장
+ 3) 회원가입 창 생성
+     - js 필터링
+     - 회원가입 완료 화면
+     - 세션 객체
+     - 클래스구현 
+### 2. 추가 구현
+ 1) 회원가입 입력 창
+     - placeholder를 통해 입력창 예시를 추가 
+     - 분반 디폴트 값 지정
+     
+ 
+ 
 
